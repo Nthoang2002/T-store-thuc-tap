@@ -49,11 +49,11 @@
                                     <td th:text="${category.id}"></td>
                                     <td th:text="${category.category_name}"></td>
                                     <td>
-                                        <a th:href="@{/admin/category/edit_category/{id}(id=${category.id})}"
+                                        <a th:href="@{/admin/category/{id}(id=${category.id})}"
                                            class="btn btn-warning" style="padding: 5px 10px; font-size: 10px;">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
-                                        <a th:href="@{/admin/category/del_category/{id}(id=${category.id})}"
+                                        <a th:href="@{/admin/category/{id}(id=${category.id})}"
                                            onclick="return confirm('Bạn có muốn xóa danh mục này!')" class="btn btn-danger"
                                            style="padding: 5px 10px; font-size: 10px;">
                                             <i class="fa-solid fa-trash-can"></i>

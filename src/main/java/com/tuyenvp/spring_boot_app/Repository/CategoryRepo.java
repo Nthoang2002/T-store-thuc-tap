@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CategoryRepo extends JpaRepository<Category, Integer> {
+public interface CategoryRepo extends JpaRepository<Category, Long> {
     @Query("SELECT c FROM Category c WHERE c.category_name LIKE %?1%")
     List<Category> searchCategory(String keyword);
 

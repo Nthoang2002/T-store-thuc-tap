@@ -3,6 +3,8 @@ package com.tuyenvp.spring_boot_app.Services.Impl;
 import com.tuyenvp.spring_boot_app.Model.Category;
 import com.tuyenvp.spring_boot_app.Repository.DbConnect;
 import com.tuyenvp.spring_boot_app.Services.CategoryService;
+import com.tuyenvp.spring_boot_app.dto.request.CategoryDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,9 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-    @Autowired
-    private DbConnect DbConnect;
+
+    private final DbConnect DbConnect;
 
     @Override
     public List<Category> ListCategory() {
@@ -24,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> findCategoryById(int category_id) {
+    public Optional<Category> findCategoryById(Long category_id) {
         return DbConnect.categoryRepo.findById(category_id);
     }
 
@@ -34,20 +37,21 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(Category edit_category) {
-        Optional<Category>category = DbConnect.categoryRepo.findById(edit_category.getId());
+    public Category updateCategory(Long id, CategoryDTO categoryDTO) {
+        Optional<Category>category = DbConnect.categoryRepo.findById(id);
         if (category.isEmpty()) {
             return null;
         }
-        Category update_category = category.get();
+        Category updateCategory = Category.builder()
+                .category_name(categoryDTO.getCategory_name())
+                .build();
         // cập nhật tên danh mục
-        update_category.setCategory_name(edit_category.getCategory_name());
-        DbConnect.categoryRepo.save(update_category);
-        return update_category;
+        DbConnect.categoryRepo.save(updateCategory);
+        return updateCategory;
     }
 
     @Override
-    public Category deleteCategory(int category_id) {
+    public Category deleteCategory(Long category_id) {
         Optional<Category>category = DbConnect.categoryRepo.findById(category_id);
         if(category.isEmpty()) {
             return null;

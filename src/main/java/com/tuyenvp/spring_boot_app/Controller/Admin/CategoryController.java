@@ -2,6 +2,7 @@ package com.tuyenvp.spring_boot_app.Controller.Admin;
 
 import com.tuyenvp.spring_boot_app.Model.Category;
 import com.tuyenvp.spring_boot_app.Services.Impl.CategoryServiceImpl;
+import com.tuyenvp.spring_boot_app.dto.request.CategoryDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/")
 public class CategoryController {
     @Autowired
     public CategoryServiceImpl categoryServiceImpl;
@@ -55,22 +56,28 @@ public class CategoryController {
 
     // sửa danh mục
     @GetMapping("/category/edit_category/{id}")
-    public String edit_category(Model model, @PathVariable("id")Integer id){
+    public String edit_category(
+            Model model,
+            @PathVariable("id")Long id){
         Optional<Category>category = categoryServiceImpl.findCategoryById(id);
         model.addAttribute("edit_category", category.get());
         return "admin/category/edit_category";
     }
-    @PostMapping("/category/edit_category")
-    public String update_category(@Valid @ModelAttribute("edit_category") Category category, BindingResult bindingResult) {
+    @PutMapping("/category/{id}")
+    public String update_category(
+            @PathVariable Long id,
+            @Valid @RequestBody CategoryDTO categoryDTO,
+            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "admin/category/edit_category";
         }
-        categoryServiceImpl.updateCategory(category);
+        categoryServiceImpl.updateCategory(id, categoryDTO);
         return "redirect:/admin/category";
     }
 
-    @GetMapping("/category/del_category/{id}")
-    public String del_category(Model model, @PathVariable("id")Integer id){
+    @DeleteMapping("/category/{id}")
+    public String del_category(
+            @PathVariable Long id){
         categoryServiceImpl.deleteCategory(id);
         return "redirect:/admin/category";
     }
